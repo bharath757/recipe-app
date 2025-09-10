@@ -2,81 +2,81 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  const [recipes, setRecipes] = useState([]);
+  const [dishes, setDishes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [expandedRecipeId, setExpandedRecipeId] = useState(null);
+  const [showInfo, setShowInfo] = useState(null);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
+    const getDishes = async () => {
       try {
-        const response = await fetch('https://dummyjson.com/recipes?limit=110&skip=0');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        const res = await fetch('https://dummyjson.com/recipes?limit=110&skip=0');
+        if (!res.ok) {
+          throw new Error('network response was not ok');
         }
-        const data = await response.json();
-        setRecipes(data.recipes);
-      } catch (e) {
-        setError(e.message);
+        const data = await res.json();
+        setDishes(data.recipes);
+      } catch (err) {
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-    fetchRecipes();
+    getDishes();
   }, []);
 
-  const toggleExpand = (id) => {
-    setExpandedRecipeId(expandedRecipeId === id ? null : id);
+  const expand = (id) => {
+    setShowInfo(showInfo === id ? null : id);
   };
 
   if (loading) {
-    return <div className="loading">Loading recipes...</div>;
+    return <div className="loading">loading...</div>;
   }
 
   if (error) {
-    return <div className="error">Error: {error}</div>;
+    return <div className="error">oops, something went wrong: {error}</div>;
   }
 
   return (
-    <div className="recipes-container">
-      <h1>Recipe World</h1>
-      <div className="recipe-grid">
-        {recipes.map((recipe) => {
-          const isExpanded = expandedRecipeId === recipe.id;
+    <div className="container">
+      <div className="title-strip">
+        <h1 className="main-title">recipe list</h1>
+      </div>
+      <div className="dish-grid">
+        {dishes.map((dish) => {
+          const isExpanded = showInfo === dish.id;
 
           return (
             <div
-              key={recipe.id}
-              className={`recipe-card ${isExpanded ? 'expanded' : ''}`}
-              onClick={() => toggleExpand(recipe.id)}
+              key={dish.id}
+              className={`dish-card ${isExpanded ? 'expanded' : ''}`}
+              onClick={() => expand(dish.id)}
             >
               {isExpanded ? (
-                <>
-                  <div className="expanded-content">
-                    <img src={recipe.image} alt={recipe.name} className="expanded-image" />
-                    <div className="expanded-details-text">
-                      <h2>{recipe.name}</h2>
-                      <p><strong>Prep Time:</strong> {recipe.prepTimeMinutes} mins</p>
-                      <p><strong>Cook Time:</strong> {recipe.cookTimeMinutes} mins</p>
-                      <p><strong>Servings:</strong> {recipe.servings}</p>
-                      <h4>Instructions:</h4>
-                      <ol>
-                        {recipe.instructions.map((item, i) => (
-                          <li key={i}>{item}</li>
-                        ))}
-                      </ol>
-                    </div>
+                <div className="expanded-content">
+                  <img src={dish.image} alt={dish.name} className="expanded-image" />
+                  <div className="info-box">
+                    <h2 className="dish-name">{dish.name}</h2>
+                    <p><strong>prep:</strong> {dish.prepTimeMinutes} mins</p>
+                    <p><strong>cook:</strong> {dish.cookTimeMinutes} mins</p>
+                    <p><strong>servings:</strong> {dish.servings}</p>
+                    <h4>how to make it:</h4>
+                    <ol>
+                      {dish.instructions.map((step, i) => (
+                        <li key={i}>{step}</li>
+                      ))}
+                    </ol>
                   </div>
-                </>
+                </div>
               ) : (
-                <>
-                  <img src={recipe.image} alt={recipe.name} className="recipe-image" />
-                  <div className="recipe-content">
-                    <h2>{recipe.name}</h2>
-                    <p>Cuisine: {recipe.cuisine}</p>
-                    <p>Difficulty: {recipe.difficulty}</p>
+                <div className="small-card">
+                  <img src={dish.image} alt={dish.name} className="dish-image" />
+                  <div className="card-text">
+                    <h2 className="dish-name">{dish.name}</h2>
+                    <p>cuisine: {dish.cuisine}</p>
+                    <p>difficulty: {dish.difficulty}</p>
                   </div>
-                </>
+                </div>
               )}
             </div>
           );
