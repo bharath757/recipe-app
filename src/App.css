@@ -1,0 +1,75 @@
+/* General Body and Layout */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  color: #222;
+}
+
+.recipes-container {
+  max-width: 1200px;
+  margin: 20px auto; /* Centers the container horizontally */
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2em;
+  color: #444;
+  margin-bottom: 25px;
+  font-weight: bold;
+}
+
+.loading, .error {
+  text-align: center;
+  font-size: 1.2em;
+  margin-top: 20px;
+  color: #666;
+}
+
+.error {
+  color: #d9534f;
+}
+
+/* Responsive Flexbox Layout */
+.recipe-grid {
+  display: flex;
+  flex-wrap: wrap; /* Allows items to wrap to a new line */
+  justify-content: center; /* Centers the items horizontally */
+  gap: 15px; /* Spacing between the cards */
+}
+
+/* Individual recipe card */
+.recipe-card {
+  /* This is the key to flexibility. Items will grow and shrink to fit, with a minimum width of 250px. */
+  flex: 1 1 250px; 
+  
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.recipe-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.recipe-content {
+  padding-top: 10px;
+}
+
+.recipe-content h2 {
+  margin: 0 0 5px 0;
+  font-size: 1.1em;
+  color: #007bff;
+}
+
+.recipe-content p {
+  margin: 3px 0;
+  color: #555;
+  font-size: 0.
